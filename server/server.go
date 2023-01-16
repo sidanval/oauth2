@@ -81,8 +81,15 @@ func (s *Server) redirect(w http.ResponseWriter, req *AuthorizeRequest, data map
 		return err
 	}
 
-	w.Header().Set("Location", uri)
-	w.WriteHeader(302)
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+	w.Header().Set("Cache-Control", "no-store")
+	w.Header().Set("Pragma", "no-cache")
+	w.WriteHeader(200)
+	e := json.NewEncoder(w)
+	e.Encode(map[string]string{
+		"redirect_uri": uri,
+	})
+
 	return nil
 }
 
